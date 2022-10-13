@@ -41,28 +41,28 @@ const FeedbackForm: FC<FeedbackFormPros> = ({ selectedCourse, formOpen, selected
             <Card sx={{ margin: 2 }}>
                 <CardContent>{selectedUser.name}, we would like to hear your feedback for the Course: <h3><strong>{selectedCourse.name}</strong></h3></CardContent>
                 <CardContent>Select if you wish to write a new feedback or edit an existing one: </CardContent>
-                    <Box>
-                        <FormControl sx={{ m: 1, minWidth: 140 }}>
+                <Box>
+                    <FormControl sx={{ m: 1, minWidth: 140 }}>
                         <InputLabel id="Feedback-select-helper-label">Your Feedback</InputLabel>
-                            <Select
-                                labelId="Feedback-List-label"
-                                id="Feedback-select"
-                                value={JSON.stringify(selectedFeedback)}
-                                autoWidth
-                                label="FeedbackList"
-                                renderValue={(value) => { return JSON.parse(value).title;}}
-                                onChange={(e) => {
-                                    setSelectedFeedback(JSON.parse(e.target.value));
-                                  }}
-                            >
-                                <MenuItem value={JSON.stringify(newFeedback)}>{newFeedback.title}</MenuItem>
-                                {userFeedback.map(feedback =>
-                                    <MenuItem value={JSON.stringify(feedback)}>
-                                            {feedback.title}
-                                    </MenuItem>)}
-                            </Select>
-                        </FormControl>
-                    </Box>
+                        <Select
+                            labelId="Feedback-List-label"
+                            id="Feedback-select"
+                            value={JSON.stringify(selectedFeedback)}
+                            autoWidth
+                            label="FeedbackList"
+                            renderValue={(value) => { return JSON.parse(value).title; }}
+                            onChange={(e) => {
+                                setSelectedFeedback(JSON.parse(e.target.value));
+                            }}
+                        >
+                            <MenuItem value={JSON.stringify(newFeedback)}>{newFeedback.title}</MenuItem>
+                            {userFeedback.map(feedback =>
+                                <MenuItem value={JSON.stringify(feedback)}>
+                                    {feedback.title}
+                                </MenuItem>)}
+                        </Select>
+                    </FormControl>
+                </Box>
                 <Box sx={{ flexDirection: 'column' }}>
                     <InputLabel id="Title">Title</InputLabel>
                     <TextField value={feedbackTitle} onChange={(e) => setFeedbackTitle(e.target.value)}>{feedbackTitle}</TextField>
@@ -70,7 +70,7 @@ const FeedbackForm: FC<FeedbackFormPros> = ({ selectedCourse, formOpen, selected
                 <p>
                     <Box sx={{ flexDirection: 'column' }}>
                         <InputLabel id="Body">Body</InputLabel>
-                        <TextField value={feedbackBody} onChange={(e) => setFeedbackBody(e.target.value)}>{feedbackBody}</TextField>
+                        <TextField value={feedbackBody} multiline={true} fullWidth={true} onChange={(e) => setFeedbackBody(e.target.value)}>{feedbackBody}</TextField>
                     </Box>
                 </p>
                 <CardActions sx={{ justifyContent: 'center' }}>
