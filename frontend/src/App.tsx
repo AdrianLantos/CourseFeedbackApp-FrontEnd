@@ -5,12 +5,12 @@ import { User } from './model/User';
 import axios from 'axios';
 import { Course } from './model/Course';
 import { Feedback } from './model/Feedback';
-import { Box, Card, CardContent, Typography, FormControlLabel, Checkbox, CardActions, Button, MenuList, MenuItem, Menu, Select, InputLabel, FormControl } from '@mui/material';
+import { Box, Card, CardContent, Typography, CardActions, Button, MenuItem, Select, InputLabel, FormControl } from '@mui/material';
 import FeedbackForm from './components/FeedbackForm';
 
 const App: FC = () => {
   const [userList, setUserList] = useState<User[]>([{ id: -1, name: "Username", courses: [], feedback: [] }]);
-  const [courseList, setCourseList] = useState<Course[]>([{ id: -1, name: "Course", users: [], feedback: [] }])
+  const [courseList, setCourseList] = useState<Course[]>()
   const [userCourses, setUserCourses] = useState<Course[]>();
   const [userFeedback, setUserFeedback] = useState<Feedback[]>([]);
   const [selectedUser, setSelectedUser] = useState<User>(userList[0]);
@@ -23,10 +23,13 @@ const App: FC = () => {
   }, []);
 
   useEffect(() => {
+    if(selectedUser.id !== -1){
     axios.get('http://localhost:8080/users/' + selectedUser.id).then((response) => setUserCourses(response.data));
+    }
   }, [selectedUser]);
 
   useEffect(() => {
+    if(selectedUser.id !== -1 && selectedCourse.id !== -1)
     axios.get('http://localhost:8080/users/' + selectedUser.id + '/feedback/' + selectedCourse.id).then((response) => setUserFeedback(response.data));
   }, [selectedCourse])
 
@@ -84,7 +87,7 @@ const App: FC = () => {
         <p>
           <Box sx={{ flex: 'center', flexDirection: 'row', justifyContent: 'center' }}>
             <Typography> If you wish to enroll {selectedUser.name} into a Course select one below </Typography>
-            <FormControl sx={{ m: 1, minWidth: 120 }}>
+            <FormControl sx={{ m: 1, minWidth: 140 }}>
               <Select
                 labelId="Course-enroll-label"
                 id="Course-enroll-select"
@@ -94,7 +97,7 @@ const App: FC = () => {
                 label="Courses"
                 renderValue={() => { return 'Courses Available'; }}
               >
-                {courseList.map(course =>
+                {courseList?.map(course =>
                   <MenuItem>
                     <Button onClick={() => enrollUser(selectedUser, course)}>
                       {course.name}
@@ -107,11 +110,10 @@ const App: FC = () => {
         <p>
           <Box sx={{ overflow: "auto" }}>
             <Card>
-              
               {userCourses?.map(course =>
                 <Card sx={{ margin: 2 }}>
                   <CardContent >
-                    <Typography>{course.name}</Typography>
+                    <Typography><strong>{course.name}</strong></Typography>
                     <CardActions sx={{ justifyContent: 'center' }}>
                       {feedbackFormState === false && <Button onClick={() => [setFeedbackFormState(true), setSelectedCourse(course)]}>Give Feedback</Button>}
                       {feedbackFormState && selectedCourse.id === course.id && <FeedbackForm selectedCourse={selectedCourse} formOpen={openFeedbackForm} selectedUser={selectedUser} userFeedback={userFeedback}></FeedbackForm>}

@@ -2,7 +2,6 @@ import { Card, CardContent, Button, TextField, CardActions, FormControl, InputLa
 import axios from "axios";
 import { countReset } from "console";
 import { FC, useEffect, useState } from "react";
-import { createDocumentRegistry } from "typescript";
 import { Course } from "../model/Course";
 import { Feedback } from "../model/Feedback";
 import { User } from "../model/User";
@@ -40,11 +39,11 @@ const FeedbackForm: FC<FeedbackFormPros> = ({ selectedCourse, formOpen, selected
     return (
         <div>
             <Card sx={{ margin: 2 }}>
-                <CardContent>{selectedUser.name}, we would like to hear your feedback for the Course:<p><strong>{selectedCourse.name}</strong></p></CardContent>
+                <CardContent>{selectedUser.name}, we would like to hear your feedback for the Course: <h3><strong>{selectedCourse.name}</strong></h3></CardContent>
                 <CardContent>Select if you wish to write a new feedback or edit an existing one: </CardContent>
-                <p>
                     <Box>
-                        <FormControl sx={{ m: 1, minWidth: 120 }}>
+                        <FormControl sx={{ m: 1, minWidth: 140 }}>
+                        <InputLabel id="Feedback-select-helper-label">Your Feedback</InputLabel>
                             <Select
                                 labelId="Feedback-List-label"
                                 id="Feedback-select"
@@ -59,14 +58,11 @@ const FeedbackForm: FC<FeedbackFormPros> = ({ selectedCourse, formOpen, selected
                                 <MenuItem value={JSON.stringify(newFeedback)}>{newFeedback.title}</MenuItem>
                                 {userFeedback.map(feedback =>
                                     <MenuItem value={JSON.stringify(feedback)}>
-                                        {/* <Button onClick={() => { setSelectedFeedback(feedback) }}> */}
                                             {feedback.title}
-                                        {/* </Button> */}
                                     </MenuItem>)}
                             </Select>
                         </FormControl>
                     </Box>
-                </p>
                 <Box sx={{ flexDirection: 'column' }}>
                     <InputLabel id="Title">Title</InputLabel>
                     <TextField value={feedbackTitle} onChange={(e) => setFeedbackTitle(e.target.value)}>{feedbackTitle}</TextField>
