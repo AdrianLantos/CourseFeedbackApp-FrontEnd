@@ -16,9 +16,9 @@ export type FeedbackFormPros = {
 const FeedbackForm: FC<FeedbackFormPros> = ({ selectedCourse, formOpen, selectedUser, userFeedback }) => {
     const [feedbackTitle, setFeedbackTitle] = useState<string>();
     const [feedbackBody, setFeedbackBody] = useState<string>();
-    const [selectedFeedback, setSelectedFeedback] = useState<Feedback>({ id: -1, title: "New Feedback", body: "", course: selectedCourse, user: selectedUser });
     const newFeedback = { id: -1, title: "New Feedback", body: "", course: selectedCourse, user: selectedUser };
-
+    const [selectedFeedback, setSelectedFeedback] = useState<Feedback>(newFeedback);
+    
     useEffect(() => {
         setFeedbackBody(selectedFeedback.body);
         setFeedbackTitle(selectedFeedback.title);
@@ -38,12 +38,11 @@ const FeedbackForm: FC<FeedbackFormPros> = ({ selectedCourse, formOpen, selected
 
     return (
         <div>
-            <Card sx={{ margin: 2 }}>
-                <CardContent>{selectedUser.name}, we would like to hear your feedback for the Course: <h3><strong>{selectedCourse.name}</strong></h3></CardContent>
-                <CardContent>Select if you wish to write a new feedback or edit an existing one: </CardContent>
+                {selectedUser.name}, we would like to hear your feedback for the Course: <h3><strong>{selectedCourse.name}</strong></h3>
+                Select if you wish to write a new feedback or edit an existing one: 
                 <Box>
                     <FormControl sx={{ m: 1, minWidth: 140 }}>
-                        <InputLabel id="Feedback-select-helper-label">Your Feedback</InputLabel>
+                        <InputLabel id="Feedback-select-helper-label">Feedback</InputLabel>
                         <Select
                             labelId="Feedback-List-label"
                             id="Feedback-select"
@@ -70,16 +69,13 @@ const FeedbackForm: FC<FeedbackFormPros> = ({ selectedCourse, formOpen, selected
                 <p>
                     <Box sx={{ flexDirection: 'column' }}>
                         <InputLabel id="Body">Body</InputLabel>
-                        <TextField value={feedbackBody} multiline={true} fullWidth={true} onChange={(e) => setFeedbackBody(e.target.value)}>{feedbackBody}</TextField>
+                        <TextField value={feedbackBody} minRows={2} multiline={true} fullWidth={true} onChange={(e) => setFeedbackBody(e.target.value)}>{feedbackBody}</TextField>
                     </Box>
                 </p>
-                <CardActions sx={{ justifyContent: 'center' }}>
                     {selectedFeedback.id === -1 && <Button variant="contained" onClick={() => save()}>Save</Button>}
-                    {selectedFeedback.id !== -1 && <Button variant="contained" onClick={() => editFeedback()}>Edit</Button>}
+                    {selectedFeedback.id !== -1 && <Button variant="contained" onClick={() => editFeedback()}>Update</Button>}
                     {selectedFeedback.id !== -1 && <Button variant="contained" sx={{ backgroundColor: "red" }} onClick={() => deleteFeedback()}>Delete</Button>}
                     <Button onClick={() => formOpen(false)}>Close</Button>
-                </CardActions>
-            </Card>
         </div>
     );
 

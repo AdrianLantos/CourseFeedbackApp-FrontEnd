@@ -7,6 +7,8 @@ import { Course } from './model/Course';
 import { Feedback } from './model/Feedback';
 import { Box, Card, CardContent, Typography, CardActions, Button, MenuItem, Select, InputLabel, FormControl } from '@mui/material';
 import FeedbackForm from './components/FeedbackForm';
+import UserSelect from './components/UserSelect';
+import CourseEnrollment from './components/CourseEnrollment';
 
 const App: FC = () => {
   const [userList, setUserList] = useState<User[]>([{ id: -1, name: "Username", courses: [], feedback: [] }]);
@@ -23,28 +25,23 @@ const App: FC = () => {
   }, []);
 
   useEffect(() => {
-    if(selectedUser.id !== -1){
-    axios.get('http://localhost:8080/users/' + selectedUser.id).then((response) => setUserCourses(response.data));
+    if (selectedUser.id !== -1) {
+      axios.get('http://localhost:8080/users/' + selectedUser.id).then((response) => setUserCourses(response.data));
     }
   }, [selectedUser]);
 
   useEffect(() => {
-    if(selectedUser.id !== -1 && selectedCourse.id !== -1)
-    axios.get('http://localhost:8080/users/' + selectedUser.id + '/feedback/' + selectedCourse.id).then((response) => setUserFeedback(response.data));
+    if (selectedUser.id !== -1 && selectedCourse.id !== -1)
+      axios.get('http://localhost:8080/users/' + selectedUser.id + '/feedback/' + selectedCourse.id).then((response) => setUserFeedback(response.data));
   }, [selectedCourse])
-
-  function enrollUser(user: User, course:  Course){
-    if(user.id  !== -1)
-    axios.put('http://localhost:8080/users/' + user.id + '/courses/' + course.id).then(reloadUserCourses)
-  }
 
   function reloadUserCourses() {
     axios.get('http://localhost:8080/users/' + selectedUser.id).then((response) => setUserCourses(response.data))
   }
 
   function loadUserFeedback() {
-    if(selectedUser.id !== -1){
-    axios.get('http://localhost:8080/users/' + selectedUser.id + '/feedback/' + selectedCourse.id).then((response) => setUserFeedback(response.data));
+    if (selectedUser.id !== -1) {
+      axios.get('http://localhost:8080/users/' + selectedUser.id + '/feedback/' + selectedCourse.id).then((response) => setUserFeedback(response.data));
     }
   }
 
@@ -53,76 +50,38 @@ const App: FC = () => {
     loadUserFeedback();
   }
 
+  function hideTitle(courseId: number): boolean {
+    if (feedbackFormState && courseId === selectedCourse.id) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
       </header>
-      <body>
-        <Box sx={{ flex: 'center', justifyContent: 'center' }}>
-          <h1>
-            <Typography> Please Select a User: </Typography>
-          </h1>
-          <FormControl sx={{ m: 1, minWidth: 120 }}>
-            <InputLabel id="User-select-helper-label">User</InputLabel>
-            <Select
-              labelId="User-select-label"
-              id="User-simple-select"
-              value={JSON.stringify(selectedUser)}
-              autoWidth
-              label="Users"
-              onChange={(e) => {
-                setSelectedUser(JSON.parse(e.target.value));
-                openFeedbackForm(false);
-              }}
-              renderValue={user => { return JSON.parse(user).name; }}
-            >
-              {userList.map(user =>
-                <MenuItem value={JSON.stringify(user)}>
-                  {user.name}
-                </MenuItem>)}
-            </Select>
-          </FormControl>
+      <body className="App-body">
+        <Box sx={{ margin: "auto", maxWidth: "80%" }}>
+            <UserSelect selectedUser={selectedUser} userList={userList} openFeedbackForm={openFeedbackForm} setSelectedUser={setSelectedUser}></UserSelect>
+            <p>
+              <CourseEnrollment selectedUser={selectedUser} courseList={courseList} reloadUserCourses={reloadUserCourses}></CourseEnrollment>
+            </p>
+          <p>
+            {userCourses?.map(course =>
+              <Card sx={{ margin: 4 }}>
+                <CardContent >
+                  {hideTitle(course.id) && <Typography><strong>{course.name}</strong></Typography>}
+                  <CardActions sx={{ justifyContent: 'center' }}>
+                    {feedbackFormState === false && <Button onClick={() => [setFeedbackFormState(true), setSelectedCourse(course)]}>Give Feedback</Button>}
+                    {feedbackFormState && selectedCourse.id === course.id && <FeedbackForm selectedCourse={selectedCourse} formOpen={openFeedbackForm} selectedUser={selectedUser} userFeedback={userFeedback}></FeedbackForm>}
+                  </CardActions>
+                </CardContent>
+              </Card>)}
+          </p>
         </Box>
-        <p>
-          <Box sx={{ flex: 'center', flexDirection: 'row', justifyContent: 'center' }}>
-            <Typography> If you wish to enroll {selectedUser.name} into a Course select one below </Typography>
-            <FormControl sx={{ m: 1, minWidth: 140 }}>
-              <Select
-                labelId="Course-enroll-label"
-                id="Course-enroll-select"
-                value=""
-                autoWidth
-                displayEmpty
-                label="Courses"
-                renderValue={() => { return 'Courses Available'; }}
-              >
-                {courseList?.map(course =>
-                  <MenuItem>
-                    <Button onClick={() => enrollUser(selectedUser, course)}>
-                      {course.name}
-                    </Button>
-                  </MenuItem>)}
-              </Select>
-            </FormControl>
-          </Box>
-        </p>
-        <p>
-          <Box sx={{ overflow: "auto" }}>
-            <Card>
-              {userCourses?.map(course =>
-                <Card sx={{ margin: 2 }}>
-                  <CardContent >
-                    <Typography><strong>{course.name}</strong></Typography>
-                    <CardActions sx={{ justifyContent: 'center' }}>
-                      {feedbackFormState === false && <Button onClick={() => [setFeedbackFormState(true), setSelectedCourse(course)]}>Give Feedback</Button>}
-                      {feedbackFormState && selectedCourse.id === course.id && <FeedbackForm selectedCourse={selectedCourse} formOpen={openFeedbackForm} selectedUser={selectedUser} userFeedback={userFeedback}></FeedbackForm>}
-                    </CardActions>
-                  </CardContent>
-                </Card>)}
-            </Card>
-          </Box>
-        </p>
       </body>
     </div >
   );

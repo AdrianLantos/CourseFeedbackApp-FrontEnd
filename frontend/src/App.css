@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  
 }
 
 .App-logo {
@@ -7,16 +8,29 @@
   pointer-events: none;
 }
 
+.App-body{
+  align-items: center;
+  margin: 0 auto;
+  float:none;
+}
+
+.Content-Box{
+  align-items: center;
+  display: flex;
+  flex: 'flex-grow';
+  flex-direction: column;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+}
 
 .App-header {
-  background-color: 'white';
   min-height: 10vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+  background: linear-gradient(to right,rgb(69, 214, 202),rgb(67, 124, 205))
 }
 
 .App-link {
