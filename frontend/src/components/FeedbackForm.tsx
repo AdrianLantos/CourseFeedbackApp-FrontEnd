@@ -38,9 +38,9 @@ const FeedbackForm: FC<FeedbackFormPros> = ({ selectedCourse, formOpen, selected
 
     return (
         <div>
-                {selectedUser.name}, we would like to hear your feedback for the Course: <h3><strong>{selectedCourse.name}</strong></h3>
+                <strong>{selectedUser.name}</strong>, we would like to hear your feedback for the Course: <h3><strong>{selectedCourse.name}</strong></h3>
                 Select if you wish to write a new feedback or edit an existing one: 
-                <Box>
+                <Box sx={{margin: 2}}>
                     <FormControl sx={{ m: 1, minWidth: 140 }}>
                         <InputLabel id="Feedback-select-helper-label">Feedback</InputLabel>
                         <Select
@@ -73,9 +73,9 @@ const FeedbackForm: FC<FeedbackFormPros> = ({ selectedCourse, formOpen, selected
                     </Box>
                 </p>
                     {selectedFeedback.id === -1 && <Button variant="contained" onClick={() => save()}>Save</Button>}
-                    {selectedFeedback.id !== -1 && <Button variant="contained" onClick={() => editFeedback()}>Update</Button>}
+                    {selectedFeedback.id !== -1 && <Button variant="contained" onClick={() => editFeedback()}>Update</Button>}{" "}
                     {selectedFeedback.id !== -1 && <Button variant="contained" sx={{ backgroundColor: "red" }} onClick={() => deleteFeedback()}>Delete</Button>}
-                    <Button onClick={() => formOpen(false)}>Close</Button>
+                    {" "}<Button onClick={() => formOpen(false)}>Close</Button>
         </div>
     );
 
