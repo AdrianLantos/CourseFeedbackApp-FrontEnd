@@ -14,7 +14,7 @@ const CourseEnrollment: FC<CourseEnrollmentPros> = ({ selectedUser, courseList, 
     
     function enrollUser(user: User, course: Course) {
         if (user.id !== -1)
-            axios.put('http://localhost:8080/users/' + user.id + '/courses/' + course.id).then(reloadUserCourses)
+            axios.put('http://localhost:8080/courses/' + course.id + '/user/' + user.id).then(reloadUserCourses)
     }
 
     return (

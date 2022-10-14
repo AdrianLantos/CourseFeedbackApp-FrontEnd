@@ -25,15 +25,15 @@ const FeedbackForm: FC<FeedbackFormPros> = ({ selectedCourse, formOpen, selected
     }, [selectedFeedback])
 
     const save = () => {
-        axios.put('http://localhost:8080/users/' + selectedUser.id + '/course/' + selectedCourse.id, { title: feedbackTitle, body: feedbackBody }).then(response => formOpen(false));
+        axios.put('http://localhost:8080/feedback/' + selectedUser.id + '/course/' + selectedCourse.id, { title: feedbackTitle, body: feedbackBody }).then(response => formOpen(false));
     }
 
     const editFeedback = () => {
-        axios.patch('http://localhost:8080/users/' + selectedUser.id + '/course/' + selectedFeedback.id, { title: feedbackTitle, body: feedbackBody }).then(response => formOpen(false));
+        axios.patch('http://localhost:8080/feedback/' + selectedUser.id + '/course/' + selectedFeedback.id, { title: feedbackTitle, body: feedbackBody }).then(response => formOpen(false));
     }
 
     const deleteFeedback = () => {
-        axios.delete('http://localhost:8080/users/feedback/' + selectedFeedback.id).then(response => formOpen(false));
+        axios.delete('http://localhost:8080/feedback/' + selectedFeedback.id).then(response => formOpen(false));
     }
 
     return (

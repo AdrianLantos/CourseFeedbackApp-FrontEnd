@@ -21,7 +21,7 @@ const App: FC = () => {
 
   useEffect(() => {
     axios.get('http://localhost:8080/users/').then((response) => setUserList(response.data));
-    axios.get('http://localhost:8080/users/courses').then((response) => setCourseList(response.data));
+    axios.get('http://localhost:8080/courses').then((response) => setCourseList(response.data));
   }, []);
 
   useEffect(() => {
@@ -32,7 +32,7 @@ const App: FC = () => {
 
   useEffect(() => {
     if (selectedUser.id !== -1 && selectedCourse.id !== -1)
-      axios.get('http://localhost:8080/users/' + selectedUser.id + '/feedback/' + selectedCourse.id).then((response) => setUserFeedback(response.data));
+      axios.get('http://localhost:8080/feedback/' + selectedCourse.id + '/user/' + selectedUser.id).then((response) => setUserFeedback(response.data));
   }, [selectedCourse])
 
   function reloadUserCourses() {
@@ -41,7 +41,7 @@ const App: FC = () => {
 
   function loadUserFeedback() {
     if (selectedUser.id !== -1) {
-      axios.get('http://localhost:8080/users/' + selectedUser.id + '/feedback/' + selectedCourse.id).then((response) => setUserFeedback(response.data));
+      axios.get('http://localhost:8080/feedback/' + selectedCourse.id + '/user/' + selectedUser.id).then((response) => setUserFeedback(response.data));
     }
   }
 
@@ -65,10 +65,10 @@ const App: FC = () => {
       </header>
       <body className="App-body">
         <Box sx={{ margin: "auto", maxWidth: "80%" }}>
-            <UserSelect selectedUser={selectedUser} userList={userList} openFeedbackForm={openFeedbackForm} setSelectedUser={setSelectedUser}></UserSelect>
-            <p>
-              <CourseEnrollment selectedUser={selectedUser} courseList={courseList} reloadUserCourses={reloadUserCourses}></CourseEnrollment>
-            </p>
+          <UserSelect selectedUser={selectedUser} userList={userList} openFeedbackForm={openFeedbackForm} setSelectedUser={setSelectedUser}></UserSelect>
+          <p>
+            <CourseEnrollment selectedUser={selectedUser} courseList={courseList} reloadUserCourses={reloadUserCourses}></CourseEnrollment>
+          </p>
           <p>
             {userCourses?.map(course =>
               <Card sx={{ margin: 4 }}>
