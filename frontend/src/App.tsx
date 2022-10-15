@@ -26,22 +26,22 @@ const App: FC = () => {
 
   useEffect(() => {
     if (selectedUser.id !== -1) {
-      axios.get('http://localhost:8080/users/' + selectedUser.id).then((response) => setUserCourses(response.data));
+      axios.get('http://localhost:8080/users/' + selectedUser.id + '/courses').then((response) => setUserCourses(response.data));
     }
   }, [selectedUser]);
 
   useEffect(() => {
     if (selectedUser.id !== -1 && selectedCourse.id !== -1)
-      axios.get('http://localhost:8080/feedback/' + selectedCourse.id + '/user/' + selectedUser.id).then((response) => setUserFeedback(response.data));
+      axios.get('http://localhost:8080/feedback/course/' + selectedCourse.id + '/user/' + selectedUser.id).then((response) => setUserFeedback(response.data));
   }, [selectedCourse])
 
   function reloadUserCourses() {
-    axios.get('http://localhost:8080/users/' + selectedUser.id).then((response) => setUserCourses(response.data))
+    axios.get('http://localhost:8080/users/' + selectedUser.id + '/courses').then((response) => setUserCourses(response.data))
   }
 
   function loadUserFeedback() {
     if (selectedUser.id !== -1) {
-      axios.get('http://localhost:8080/feedback/' + selectedCourse.id + '/user/' + selectedUser.id).then((response) => setUserFeedback(response.data));
+      axios.get('http://localhost:8080/feedback/course/' + selectedCourse.id + '/user/' + selectedUser.id).then((response) => setUserFeedback(response.data));
     }
   }
 
